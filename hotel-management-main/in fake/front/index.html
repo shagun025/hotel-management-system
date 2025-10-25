@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Hotel Management System</h1>
+        <nav>
+            <ul>
+                <li><a href="#manage-rooms">Manage Rooms</a></li>
+                <li><a href="#check-in">Check-In</a></li>
+                <li><a href="#available-rooms">Available Rooms</a></li>
+                <li><a href="#search-customer">Search Customer</a></li>
+                <li><a href="#check-out">Check-Out</a></li>
+                <li><a href="#guest-summary">Guest Summary Report</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Section for managing rooms -->
+        <section id="manage-rooms">
+            <h2>Manage Rooms</h2>
+            
+            <!-- Form for adding a room -->
+            <form id="add-room-form">
+                <label for="roomNumber">Room Number:</label>
+                <input type="text" id="roomNumber" name="roomNumber" required><br><br>
+        
+                <label for="roomType">Room Type:</label>
+                <select id="roomType" name="roomType" required>
+                    <option value="ac">AC</option>
+                    <option value="non-ac">Non-AC</option>
+                </select><br><br>
+        
+                <label for="comfort">Comfort Level:</label>
+                <select id="comfort" name="comfort" required>
+                    <option value="basic">Basic</option>
+                    <option value="premium">Premium</option>
+                </select><br><br>
+        
+                <label for="size">Room Size:</label>
+                <select id="size" name="size" required>
+                    <option value="small">Small</option>
+                    <option value="big">Big</option>
+                </select><br><br>
+        
+                <label for="rent">Daily Rent (₹):</label>
+                <input type="number" id="rent" name="rent" required><br><br>
+        
+                <button type="submit">Save Room</button>
+            </form>
+        
+            <h3>Delete Room</h3>
+            <!-- Form for deleting a room -->
+            <form id="delete-room-form">
+                <label for="deleteRoomNumber">Room Number to Delete:</label>
+                <input type="text" id="deleteRoomNumber" name="deleteRoomNumber" required><br><br>
+                <button type="submit">Delete Room</button>
+            </form>
+        </section>
+
+        <!-- Section for available rooms -->
+        <section id="available-rooms">
+            <h2>Available Rooms</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Room Number</th>
+                        <th>Room Type</th>
+                        <th>Comfort</th>
+                        <th>Size</th>
+                        <th>Rent</th>
+                    </tr>
+                </thead>
+                <tbody id="roomTableBody">
+                    <!-- Room data will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section for check-in -->
+        <section id="check-in">
+            <h2>Check-In</h2>
+            <form id="checkInForm">
+                <label for="guestName">Guest Name:</label>
+                <input type="text" id="guestName" name="guestName" required><br><br>
+
+                <label for="roomNumberCheckIn">Room Number:</label>
+                <input type="text" id="roomNumberCheckIn" name="roomNumberCheckIn" required><br><br>
+
+                <label for="checkInDate">Check-In Date:</label>
+                <input type="date" id="checkInDate" name="checkInDate" required><br><br>
+
+                <label for="checkOutDate">Check-Out Date:</label>
+                <input type="date" id="checkOutDate" name="checkOutDate" required><br><br>
+
+                <button type="button" id="getRoomRentBtn">Get Room Rent</button><br><br>
+
+                <h3>Payment Record</h3>
+                <label for="totalPaymentAmount">Total Payment Amount (₹):</label>
+                <input type="number" id="totalPaymentAmount" name="totalPaymentAmount" required readonly><br><br>
+
+                <label for="paymentAmount">Amount Paid (₹):</label>
+                <input type="number" id="paymentAmount" name="paymentAmount" required><br><br>
+
+                <label for="paymentStatus">Payment Status:</label>
+                <select id="paymentStatus" name="paymentStatus" required>
+                    <option value="paid">Paid</option>
+                    <option value="pending">Pending</option>
+                    <option value="partially-paid">Partially Paid</option>
+                </select><br><br>
+
+                <button type="submit">Check-In</button>
+            </form>
+        </section>
+
+        <!-- Section for searching customer details -->
+        <section id="search-customer">
+            <h2>Search Customer</h2>
+            <form id="searchForm">
+                <label for="searchRoomOrName">Enter Room Number or Guest Name:</label>
+                <input type="text" id="searchRoomOrName" name="searchRoomOrName" required>
+                <button type="button" onclick="searchCustomer()">Search</button>
+            </form>
+
+            <div id="customerDetails" style="display:none;">
+                <h3>Customer Details:</h3>
+                <p><strong>Guest Name:</strong> <span id="guestNameDetails"></span></p>
+                <p><strong>Room Number:</strong> <span id="roomNumberDetails"></span></p>
+                <p><strong>Mobile Number:</strong> <span id="mobileNumberDetails"></span></p>
+                <p><strong>Check-In Date & Time:</strong> <span id="checkInDateTimeDetails"></span></p>
+                <p><strong>Total Amount:</strong> ₹<span id="totalAmountDetails"></span></p>
+                <p><strong>Amount Paid:</strong> ₹<span id="amountPaidDetails"></span></p>
+                <p><strong>Remaining Balance:</strong> ₹<span id="remainingBalanceDetails"></span></p>
+            </div>
+
+            <div id="errorMessage" style="display:none; color: red;">
+                <p>Customer not found. Please check the room number or guest name.</p>
+            </div>
+        </section>
+
+        <!-- Section for checking out -->
+        <section id="check-out">
+            <h2>Check-Out</h2>
+            <form id="checkOutForm">
+                <label for="roomNumberCheckOut">Room Number:</label>
+                <input type="text" id="roomNumberCheckOut" name="roomNumberCheckOut" required><br><br>
+
+                <label for="checkInDateCheckOut">Check-In Date:</label>
+                <input type="date" id="checkInDateCheckOut" name="checkInDateCheckOut" readonly><br><br>
+
+                <label for="checkOutDate">Check-Out Date:</label>
+                <input type="date" id="checkOutDate" name="checkOutDate" required><br><br>
+
+                <button type="submit">Check-Out</button>
+
+                <!-- Payment Section -->
+                <h3>Payment Details</h3>
+                <label for="totalAmount">Total Amount (₹):</label>
+                <input type="number" id="totalAmount" name="totalAmount" required readonly><br><br>
+
+                <label for="amountPaid">Amount Paid (₹):</label>
+                <input type="number" id="amountPaid" name="amountPaid" required><br><br>
+
+                <label for="remainingBalance">Remaining Balance (₹):</label>
+                <input type="number" id="remainingBalance" name="remainingBalance" required readonly><br><br>
+ 
+                <label for="payBalance">Pay Remaining Balance (₹):</label>
+                <input type="number" id="payBalance" name="payBalance" min="0"><br><br>
+
+                <button type="submit">Check-Out</button>
+            </form>
+        </section>
+
+        <!-- Section for Guest Summary -->
+        <section id="guest-summary">
+            <h2>Guest Summary</h2>
+            <form>
+                <label for="searchGuest">Search by Guest Name or Room Number:</label>
+                <input type="text" id="searchGuest" name="searchGuest" oninput="searchGuest()" placeholder="Enter Guest Name or Room Number">
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Guest Name</th>
+                        <th>Room Number</th>
+                        <th>Mobile Number</th>
+                        <th>Check-In Date & Time</th>
+                        <th>Total Amount</th>
+                        <th>Amount Paid</th>
+                        <th>Remaining Balance</th>
+                    </tr>
+                </thead>
+                <tbody id="guestTableBody">
+                    <!-- Guest data will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+    <!-- Include all required JavaScript files -->
+    <script src="manageRooms.js"></script>
+    <script src="availableRooms.js"></script>
+    <script src="checkin.js"></script>
+    <script src="searchcustomer.js"></script>
+    <script src="checkout.js"></script>
+    <script src="guestsummary.js"></script>
+</body>
+
+</html>
